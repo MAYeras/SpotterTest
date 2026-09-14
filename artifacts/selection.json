@@ -1,0 +1,10 @@
+{
+  "full": {
+    "model": "catboost",
+    "trees": 277
+  },
+  "december": {
+    "model": "lightgbm",
+    "trees": 110
+  }
+}
