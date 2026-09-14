@@ -1,6 +1,6 @@
 # Freight Rate Prediction Challenge
 
-Predict posted freight rates for 12,000 November-December 2025 loads and the supplied fixed December scenario. The implementation, evaluation, and deliverables follow the supplied README and unmodified `score.py`. `Freight_Rate_ML_Assessment.pdf` was not available during this review: confirm its additional requirements before submission.
+Predict posted freight rates for 12,000 November-December 2025 loads and the supplied fixed December scenario.
 
 ## Setup
 
@@ -37,13 +37,13 @@ python -m unittest discover -s tests -v
 
 Train January-June and use July-August MAE to select tree count and model family. Refit through August and evaluate September-October without early stopping on those evaluation labels. Compare CatBoost and LightGBM with common features and a quote-total baseline (`distance * quote_signal`) for the full task. For December, compare both models with only available scenario fields and a training-median baseline. The same chronological partitions apply to both tasks.
 
-September-October was used in earlier exploratory work, so this is a retrospective comparison, not an untouched test set. Do not present it as an unbiased final score. The supplied scorer validates output contracts and creates the chart; Spotter computes hidden-label submission metrics.
+September-October was used in earlier exploratory work, so this is a retrospective comparison, not an untouched test set. These results are not an unbiased final score. The supplied scorer validates output contracts and creates the chart; Spotter computes hidden-label submission metrics.
 
 Features include route, equipment, distance, weight, month, weekday, and annual sine/cosine terms. The full model also uses coordinates, market index, quote signal, and quote total. Tree models handle missing numerical values natively; missing categoricals become `Missing`. LightGBM category mappings are learned only from each training partition; unseen values are treated as missing. IDs and labels are excluded from predictors. Prediction values are floored at $0.01 to satisfy the scorer.
 
 December has no quote signal, market index, or coordinates. It therefore uses a separately evaluated reduced model. Training contains no November/December observations and less than one annual cycle: the scenario chart is a model projection, not evidence of learned December/holiday behavior. Availability of quote and market signals at real quote time needs confirmation from the assessment/data owner.
 
-The selected December model returns $916.24 for each of the 31 dates in this run. Its flat chart reflects the model output; no artificial seasonality was added.
+The selected December model returns $916.24 for each of the 31 dates in this run. The chart shows the model's constant prediction for this scenario.
 
 ## Files and deliverables
 
@@ -57,4 +57,4 @@ The selected December model returns $916.24 for each of the 31 dates in this run
 - `reports/loom_script.md`: 2-3 minute recording script.
 - `experiments/`: preserved historical scripts; use the main pipeline for reproduction.
 
-Report generation (optional): install `reportlab>=4,<5`, then run `python reports/build_report.py` after the scorer. The recording must be made by the candidate; add the real Loom link here before submission. Push the finished repository to your GitHub account and verify access for reviewers. Neither a GitHub upload nor Loom recording is performed by the local training pipeline.
+Report generation (optional): install `reportlab>=4,<5`, then run `python reports/build_report.py` after the scorer.
